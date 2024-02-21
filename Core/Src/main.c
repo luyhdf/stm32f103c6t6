@@ -23,7 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include <string.h>
-#include "rc522.h"
+#include "RC522.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -105,11 +105,17 @@ int main(void)
     /* USER CODE END WHILE */
 	 ucStatusReturn = PCD_Request(PICC_REQALL, RxBuffer);//返回值为0，代表寻卡成功；并把卡类型存入RxBuffer中
 	 if ( ucStatusReturn == PCD_OK  ){   /*寻卡*/
+
 		if(PCD_Anticoll(RxBuffer) == PCD_OK){//防冲撞，完成这部就可以简单地 读取卡号，本次不涉及更高层次应用
-		sprintf(Card_ID,"%x%x%x%x",RxBuffer[0],RxBuffer[1],RxBuffer[2],RxBuffer[3]);
-		printf("ID=%s\r\n",Card_ID);
-		HAL_GPIO_WritePin(LED_G_GPIO_Port,LED_G_Pin,GPIO_PIN_RESET);//LED1亮
-		memset(RxBuffer, 0, sizeof(RxBuffer));//清空字符串,这里要清除RxBuffer才行
+			uint16_t cardType = (RxBuffer[0] << 8) | RxBuffer[1];
+			PCD_Select(Card_ID);  // 选卡
+
+			printf("卡类型：0x%04X\r\n", cardType); //ATQA
+			sprintf(Card_ID,"%x%x%x%x",RxBuffer[0],RxBuffer[1],RxBuffer[2],RxBuffer[3]);
+			printf("ID=%s\r\n",Card_ID);
+
+			HAL_GPIO_WritePin(LED_G_GPIO_Port,LED_G_Pin,GPIO_PIN_RESET);//LED1亮
+			memset(RxBuffer, 0, sizeof(RxBuffer));//清空字符串,这里要清除RxBuffer才行
 		 }
 	 }
 	 HAL_Delay(100);
