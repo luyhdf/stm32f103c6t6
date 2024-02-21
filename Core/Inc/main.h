@@ -61,6 +61,10 @@ void Error_Handler(void);
 #define LED_G_GPIO_Port GPIOC
 #define KEY_Pin GPIO_PIN_14
 #define KEY_GPIO_Port GPIOC
+#define RC522_CS_Pin GPIO_PIN_4
+#define RC522_CS_GPIO_Port GPIOA
+#define RC522_RST_Pin GPIO_PIN_12
+#define RC522_RST_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
