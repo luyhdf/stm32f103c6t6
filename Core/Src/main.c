@@ -104,34 +104,16 @@ int main(void)
 
     /* USER CODE END WHILE */
 	 ucStatusReturn = PCD_Request(PICC_REQALL, RxBuffer);//返回值为0，代表寻卡成功；并把卡类型存入RxBuffer中
-	 if ( ucStatusReturn == PCD_OK  ){
-		 PCD_Anticoll(RxBuffer);   //防冲撞，完成这部就可以简单地 读取卡号，本次不涉及更高层次应用
-		 sprintf(Card_ID,"%x%x%x%x",RxBuffer[0],RxBuffer[1],RxBuffer[2],RxBuffer[3]);
-		 printf("ID=%s\r\n",Card_ID);
-
-		 if(strcmp(Card_ID,"b59dfcaa")==0)
-		 {
-		   HAL_GPIO_WritePin(LED_G_GPIO_Port,LED_G_Pin,GPIO_PIN_RESET);//LED1亮
-		   HAL_Delay(1000);
-		   memset(RxBuffer, 0, sizeof(RxBuffer));//清空字符串,这里要清除RxBuffer才行
+	 if ( ucStatusReturn == PCD_OK  ){   /*寻卡*/
+		if(PCD_Anticoll(RxBuffer) == PCD_OK){//防冲撞，完成这部就可以简单地 读取卡号，本次不涉及更高层次应用
+		sprintf(Card_ID,"%x%x%x%x",RxBuffer[0],RxBuffer[1],RxBuffer[2],RxBuffer[3]);
+		printf("ID=%s\r\n",Card_ID);
+		HAL_GPIO_WritePin(LED_G_GPIO_Port,LED_G_Pin,GPIO_PIN_RESET);//LED1亮
+		memset(RxBuffer, 0, sizeof(RxBuffer));//清空字符串,这里要清除RxBuffer才行
 		 }
-		 else if(strcmp(Card_ID,"e1eff3cc")==0)
-		 {
-		   HAL_GPIO_WritePin(LED_G_GPIO_Port,LED_G_Pin,GPIO_PIN_RESET);//LED1亮
-		   HAL_Delay(1000);
-		   printf("LiuJunfan\r\n");
-		   memset(RxBuffer, 0, sizeof(RxBuffer));//清空字符串,这里要清除RxBuffer才行，否则Card_ID又会被组起来
-		 }
-		 else
-		 {
-		   HAL_GPIO_WritePin(LED_G_GPIO_Port,LED_G_Pin,GPIO_PIN_SET);//LED1灭
-		   HAL_GPIO_WritePin(LED_G_GPIO_Port,LED_G_Pin,GPIO_PIN_SET);//LED0灭
-		   memset(RxBuffer, 0, sizeof(RxBuffer));//清空字符串,这里要清除RxBuffer才行
-		 }
-
 	 }
-
-	 HAL_Delay(1000);
+	 HAL_Delay(100);
+	 HAL_GPIO_WritePin(LED_G_GPIO_Port,LED_G_Pin,GPIO_PIN_SET);//LED1亮
   }
   /* USER CODE END 3 */
 }
