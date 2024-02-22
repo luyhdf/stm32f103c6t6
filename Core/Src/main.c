@@ -100,8 +100,8 @@ int main(void)
   uint8_t ucArray_ID[4];
   uint8_t RxBuffer[4];
   char Card_ID[8];
-  uint8_t KeyValue[]={0xFF ,0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; // 密钥
-  uint8_t ucStatusReturn; /*返回状态*/
+  uint8_t KeyValue[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; // 密钥
+  uint8_t ucStatusReturn;                                    /*返回状态*/
   while (1)
   {
 
@@ -117,16 +117,34 @@ int main(void)
       if (PCD_Anticoll(RxBuffer) == PCD_OK)
       { // 防冲撞，完成这部就可以简单地 读取卡号，本次不涉及更高层次应用
 
-    	memcpy(ucArray_ID, RxBuffer, sizeof(RxBuffer)); // 清空字符串,这里要清除RxBuffer才行
+        memcpy(ucArray_ID, RxBuffer, sizeof(RxBuffer)); // 清空字符串,这里要清除RxBuffer才行
         sprintf(Card_ID, "%02X%02X%02X%02X", RxBuffer[0], RxBuffer[1], RxBuffer[2], RxBuffer[3]);
         printf("ID=%s\r\n", Card_ID);
         PCD_Select(ucArray_ID); // 选卡
-        if( PCD_AuthState( PICC_AUTHENT1A, 0x01, KeyValue, ucArray_ID ) == PCD_OK )
+        if (PCD_AuthState(PICC_AUTHENT1B, 0x01, KeyValue, ucArray_ID) == PCD_OK)
         {
-          printf( "检验密码成功\r\n" );
+          printf("检验密码成功\r\n");
+          char *pData = "hello";
+          uint8_t ucComMF522Buf[16];
+          /* 拷贝 pData 里的 Len 个字符到 ucComMF522Buf */
+          for (uint8_t j = 0; j < 16; j++)
+          {
+            if (j < strlen(pData))
+              ucComMF522Buf[j] = pData[j];
+            else
+              ucComMF522Buf[j] = 0; // 16个字节若是未填满的字节置0
+          }
+          if (PCD_WriteBlock(0x02, ucComMF522Buf) != PCD_OK)
+          {
+            printf("写入数据到数据块失败\r\n");
+          }
+          else{
+            printf( "写入数据成功！\r\n" );
+          }
         }
-        else{
-          printf( "检验密码失败\r\n" );
+        else
+        {
+          printf("检验密码失败\r\n");
         }
         HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_RESET); // LED1亮
       }
