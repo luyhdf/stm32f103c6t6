@@ -97,6 +97,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  uint8_t ucArray_ID[4];
   uint8_t RxBuffer[4];
   char Card_ID[8];
   uint8_t KeyValue[]={0xFF ,0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; // 密钥
@@ -115,10 +116,12 @@ int main(void)
       printf("卡类型: 0x%04X\r\n", cardType); // ATQA
       if (PCD_Anticoll(RxBuffer) == PCD_OK)
       { // 防冲撞，完成这部就可以简单地 读取卡号，本次不涉及更高层次应用
-        sprintf(Card_ID, "%x%x%x%x", RxBuffer[0], RxBuffer[1], RxBuffer[2], RxBuffer[3]);
+
+    	memcpy(ucArray_ID, RxBuffer, sizeof(RxBuffer)); // 清空字符串,这里要清除RxBuffer才行
+        sprintf(Card_ID, "%02X%02X%02X%02X", RxBuffer[0], RxBuffer[1], RxBuffer[2], RxBuffer[3]);
         printf("ID=%s\r\n", Card_ID);
-        PCD_Select(RxBuffer); // 选卡
-        if( PCD_AuthState( PICC_AUTHENT1B, 0x01, KeyValue, RxBuffer ) == PCD_OK )
+        PCD_Select(ucArray_ID); // 选卡
+        if( PCD_AuthState( PICC_AUTHENT1A, 0x01, KeyValue, ucArray_ID ) == PCD_OK )
         {
           printf( "检验密码成功\r\n" );
         }
