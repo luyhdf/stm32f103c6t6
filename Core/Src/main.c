@@ -92,12 +92,14 @@ int main(void)
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
   PCD_Init(); // RC522初始化
-  uint8_t RxBuffer[4];
-  char Card_ID[8];
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  uint8_t RxBuffer[4];
+  char Card_ID[8];
+  uint8_t KeyValue[]={0xFF ,0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; // 密钥
   uint8_t ucStatusReturn; /*返回状态*/
   while (1)
   {
@@ -115,11 +117,18 @@ int main(void)
       { // 防冲撞，完成这部就可以简单地 读取卡号，本次不涉及更高层次应用
         sprintf(Card_ID, "%x%x%x%x", RxBuffer[0], RxBuffer[1], RxBuffer[2], RxBuffer[3]);
         printf("ID=%s\r\n", Card_ID);
-        PCD_Select(Card_ID); // 选卡
-
+        PCD_Select(RxBuffer); // 选卡
+        if( PCD_AuthState( PICC_AUTHENT1B, 0x01, KeyValue, RxBuffer ) == PCD_OK )
+        {
+          printf( "检验密码成功\r\n" );
+        }
+        else{
+          printf( "检验密码失败\r\n" );
+        }
         HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_RESET); // LED1亮
       }
     }
+    PCD_Halt();
     HAL_Delay(100);
     HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_SET); // LED1灭
   }
