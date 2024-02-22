@@ -26,7 +26,7 @@ void MFRC_Init(void)
 * 出口参数: -byte:接收到的数据
 ***************************************************************************************/
 static uint8_t ret;       //些函数是HAL与标准库不同和地方，【读写函数】
-uint8_t SPI2_RW_Byte(uint8_t byte)
+uint8_t SPI_RW_Byte(uint8_t byte)
 {
     HAL_SPI_TransmitReceive(&hspi1, &byte, &ret, 1, 10);//把byte写入，并读出一个值 存入ret
     return   ret;                 //入口是byte的地址，读取时用的也是ret的地址；1：一次只写入一个值 10：timeout
@@ -46,8 +46,8 @@ void MFRC_WriteReg(uint8_t addr, uint8_t data)
     uint8_t AddrByte;
     AddrByte = (addr << 1 ) & 0x7E; //求出地址字节
     RS522_NSS(0);                   //NSS拉低
-    SPI2_RW_Byte(AddrByte);         //写地址字节
-    SPI2_RW_Byte(data);             //写数据
+    SPI_RW_Byte(AddrByte);         //写地址字节
+    SPI_RW_Byte(data);             //写数据
     RS522_NSS(1);                   //NSS拉高
 }
 
@@ -65,8 +65,8 @@ uint8_t MFRC_ReadReg(uint8_t addr)
     uint8_t AddrByte, data;
     AddrByte = ((addr << 1 ) & 0x7E ) | 0x80;   //求出地址字节
     RS522_NSS(0);                               //NSS拉低
-    SPI2_RW_Byte(AddrByte);                     //写地址字节
-    data = SPI2_RW_Byte(0x00);                  //读数据
+    SPI_RW_Byte(AddrByte);                     //写地址字节
+    data = SPI_RW_Byte(0x00);                  //读数据
     RS522_NSS(1);                               //NSS拉高
     return data;
 }
