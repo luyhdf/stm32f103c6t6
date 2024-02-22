@@ -5,8 +5,8 @@
  *      Author: luyh
  */
 
-#ifndef SLIP39_WORDLIST_H_
-#define SLIP39_WORDLIST_H_
+#ifndef WORDLIST_SLIP39_H_
+#define WORDLIST_SLIP39_H_
 
 const char *slip39_wordlist[1024] = {
 	"academic"

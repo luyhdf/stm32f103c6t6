@@ -5,8 +5,8 @@
  *      Author: luyh
  */
 
-#ifndef BIP39_WORDLIST_H_
-#define BIP39_WORDLIST_H_
+#ifndef WORDLIST_BIP39_H_
+#define WORDLIST_BIP39_H_
 
 const char *bip39_wordlist[2048] = {
 	"abandon",
