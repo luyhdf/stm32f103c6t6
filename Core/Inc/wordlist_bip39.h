@@ -1,5 +1,5 @@
 /*
- * wordlist.h
+ * wordlist_bip39.h
  *
  *  Created on: Feb 22, 2024
  *      Author: luyh
@@ -8,7 +8,7 @@
 #ifndef WORDLIST_BIP39_H_
 #define WORDLIST_BIP39_H_
 
-const char *bip39_wordlist[2048] = {
+const char *wordlist_bip39[2048] = {
 	"abandon",
 	"ability",
 	"able",
