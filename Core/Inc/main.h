@@ -59,12 +59,28 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define LED_G_Pin GPIO_PIN_13
 #define LED_G_GPIO_Port GPIOC
-#define KEY_Pin GPIO_PIN_14
-#define KEY_GPIO_Port GPIOC
-#define RC522_CS_Pin GPIO_PIN_4
-#define RC522_CS_GPIO_Port GPIOA
-#define RC522_RST_Pin GPIO_PIN_12
+#define RC522_CS_Pin GPIO_PIN_0
+#define RC522_CS_GPIO_Port GPIOB
+#define RC522_RST_Pin GPIO_PIN_1
 #define RC522_RST_GPIO_Port GPIOB
+#define RC522_IRQ_Pin GPIO_PIN_2
+#define RC522_IRQ_GPIO_Port GPIOB
+#define KED_R4_Pin GPIO_PIN_12
+#define KED_R4_GPIO_Port GPIOB
+#define KEY_R3_Pin GPIO_PIN_13
+#define KEY_R3_GPIO_Port GPIOB
+#define KEY_R2_Pin GPIO_PIN_14
+#define KEY_R2_GPIO_Port GPIOB
+#define KEY_R1_Pin GPIO_PIN_15
+#define KEY_R1_GPIO_Port GPIOB
+#define KEY_C1_Pin GPIO_PIN_15
+#define KEY_C1_GPIO_Port GPIOA
+#define KEY_C2_Pin GPIO_PIN_3
+#define KEY_C2_GPIO_Port GPIOB
+#define KEY_C3_Pin GPIO_PIN_4
+#define KEY_C3_GPIO_Port GPIOB
+#define KEY_C4_Pin GPIO_PIN_5
+#define KEY_C4_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
