@@ -121,11 +121,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  uint8_t key = keyboard_scan();
+	  KeyMap key = keyboard_scan();
 
 	  // 使用返回的指针进行操�?
-	  if (key != 0) {
-		  printf("Pressed key: %d\n", key);
+	  if (key.id != 0) {
+		  printf("Pressed key: %s\n", key.name);
 	  } else {
 		  printf("No key pressed.\n");
 	  }

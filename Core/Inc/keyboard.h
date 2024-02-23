@@ -12,7 +12,13 @@
 
 #define MatrixKeyPort GPIOB
 
+typedef struct {
+	const uint8_t id;
+    const char* name;
+    const char* letter;
+} KeyMap;
 
-uint8_t keyboard_scan();
+
+KeyMap keyboard_scan();
 
 #endif /* INC_KEYBOARD_H_ */
