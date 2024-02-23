@@ -9,9 +9,11 @@
 #include "main.h"
 #include "stm32f1xx_hal.h"
 
-uint16_t Col_Pin_In[4] = {KEY_C1_Pin, KEY_C2_Pin, KEY_C3_Pin, KEY_C4_Pin};
-uint16_t Row_Pin_Out[4] = {KEY_R1_Pin, KEY_R2_Pin, KEY_R3_Pin, KEY_R4_Pin};
+// 按键行列IO映射
+uint16_t Col_Pin_In[4] = {KEY_C1_Pin, KEY_C2_Pin, KEY_C3_Pin, KEY_C4_Pin};  // 行选择输入
+uint16_t Row_Pin_Out[4] = {KEY_R1_Pin, KEY_R2_Pin, KEY_R3_Pin, KEY_R4_Pin};  // 列选择输出
 
+// 按键功能映射
 const KeyMap keymap[4][4] = {
 	{{1, "1", ""},
 	 {2, "2", "abc"},
@@ -30,7 +32,10 @@ const KeyMap keymap[4][4] = {
 	 {15, "right", ""},
 	 {16, "enter", ""}}};
 
+// 无按键
 const KeyMap noKey = {0, "noKey", ""};
+
+KeyMode keymode;
 
 KeyMap keyboard_scan()
 {

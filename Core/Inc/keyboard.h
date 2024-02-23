@@ -12,12 +12,20 @@
 
 #define MatrixKeyPort GPIOB
 
+// 按键映射定义
 typedef struct {
 	const uint8_t id;
     const char* name;
     const char* letter;
 } KeyMap;
 
+// 输入法模式
+typedef enum {
+    Numeric,
+    Alphabetic
+} KeyMode;
+
+extern KeyMode keymode;
 
 KeyMap keyboard_scan();
 
