@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "RC522.h"
+#include "keyboard.h"
 // #include "wordlist_bip39.h"
 //#include "wordlist_slip39.h"
 
@@ -102,7 +103,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USB_PCD_Init();
   /* USER CODE BEGIN 2 */
-  PCD_Init(); // RC522初始�??
+  PCD_Init(); // RC522初始�???
 
   /* USER CODE END 2 */
 
@@ -113,22 +114,32 @@ int main(void)
   char Card_ID[9];
   uint8_t KeyValue[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; // 密钥
   uint8_t ucStatusReturn;                                    /*返回状�??*/
+
   while (1)
   {
 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    ucStatusReturn = PCD_Request(PICC_REQALL, RxBuffer); // 返回值为0，代表寻卡成功；并把卡类型存入RxBuffer�??
+	  uint8_t key = keyboard_scan();
+
+	  // 使用返回的指针进行操�?
+	  if (key != 0) {
+		  printf("Pressed key: %d\n", key);
+	  } else {
+		  printf("No key pressed.\n");
+	  }
+
+    ucStatusReturn = PCD_Request(PICC_REQALL, RxBuffer); // 返回值为0，代表寻卡成功；并把卡类型存入RxBuffer�???
 
     if (ucStatusReturn == PCD_OK)
     { /*寻卡*/
       uint16_t cardType = (RxBuffer[0] << 8) | RxBuffer[1];
-      printf("卡类�??: 0x%04X\r\n", cardType); // ATQA
+      printf("卡类�???: 0x%04X\r\n", cardType); // ATQA
       if (PCD_Anticoll(RxBuffer) == PCD_OK)
       { // 防冲撞，完成这部就可以简单地 读取卡号，本次不涉及更高层次应用
 
-        memcpy(ucArray_ID, RxBuffer, sizeof(RxBuffer)); // 清空字符�??,这里要清除RxBuffer才行
+        memcpy(ucArray_ID, RxBuffer, sizeof(RxBuffer)); // 清空字符�???,这里要清除RxBuffer才行
         sprintf(Card_ID, "%02X%02X%02X%02X", RxBuffer[0], RxBuffer[1], RxBuffer[2], RxBuffer[3]);
         printf("ID=%s\r\n", Card_ID);
         PCD_Select(ucArray_ID); // 选卡
@@ -137,7 +148,7 @@ int main(void)
         for (uint8_t b = 0; b<16;b++){
 			if (PCD_AuthState(PICC_AUTHENT1B, b, KeyValue, ucArray_ID) == PCD_OK)
 			{
-			  printf("�??验密码成功\r\n");
+			  printf("�???验密码成功\r\n");
 			  if (PCD_ReadBlock(b,ucComMF522Buf_read) == PCD_OK){
 				  printf("读取成功");
 			  }
@@ -165,15 +176,15 @@ int main(void)
 			}
 			else
 			{
-			  printf("�??验密码失败\r\n");
+			  printf("�???验密码失败\r\n");
 			}
         }
-        HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_RESET); // LED1�??
+        HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_RESET); // LED1�???
       }
     }
     PCD_Halt();
     HAL_Delay(100);
-    HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_SET); // LED1�??
+    HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_SET); // LED1�???
   }
   /* USER CODE END 3 */
 }
