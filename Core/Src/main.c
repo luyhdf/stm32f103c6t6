@@ -32,7 +32,7 @@
 #include "RC522.h"
 #include "keyboard.h"
 // #include "wordlist_bip39.h"
-//#include "wordlist_slip39.h"
+// #include "wordlist_slip39.h"
 
 /* USER CODE END Includes */
 
@@ -69,9 +69,9 @@ void SystemClock_Config(void);
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -103,7 +103,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USB_PCD_Init();
   /* USER CODE BEGIN 2 */
-  PCD_Init(); // RC522初始�???
+  PCD_Init(); // RC522初始�????
 
   /* USER CODE END 2 */
 
@@ -112,8 +112,12 @@ int main(void)
   uint8_t ucArray_ID[4];
   uint8_t RxBuffer[4];
   char Card_ID[9];
-  uint8_t KeyValue[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; // 密钥
+  uint8_t AuthKeyValue[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; // 密钥
   uint8_t ucStatusReturn;                                    /*返回状�??*/
+
+  // 初始化数字模式及空字符
+  char keyValue[MaxKeyValueAlphabetic] = "";
+  KeyMode keyMode = Numeric;
 
   while (1)
   {
@@ -121,78 +125,86 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  KeyMap key = keyboard_scan();
+    KeyMap key = keyboard_scan();
 
-	  // 使用返回的指针进行操�?
-	  if (key.id != 0) {
-		  printf("Pressed key: %s\n", key.name);
-	  } else {
-		  printf("No key pressed.\n");
-	  }
+    // 使用返回的指针进行操�??
+    if (key.id != 0)
+    {
+      printf("Pressed key: %s\n", key.name);
+      keyboard_process(key,keyMode,keyValue);
+      printf("keyboard_process keyValue: %s\n", keyValue);
+    }
+    else
+    {
+      printf("No key pressed.\n");
+    }
 
-    ucStatusReturn = PCD_Request(PICC_REQALL, RxBuffer); // 返回值为0，代表寻卡成功；并把卡类型存入RxBuffer�???
+    ucStatusReturn = PCD_Request(PICC_REQALL, RxBuffer); // 返回值为0，代表寻卡成功；并把卡类型存入RxBuffer�????
 
     if (ucStatusReturn == PCD_OK)
     { /*寻卡*/
       uint16_t cardType = (RxBuffer[0] << 8) | RxBuffer[1];
-      printf("卡类�???: 0x%04X\r\n", cardType); // ATQA
+      printf("卡类�????: 0x%04X\r\n", cardType); // ATQA
       if (PCD_Anticoll(RxBuffer) == PCD_OK)
       { // 防冲撞，完成这部就可以简单地 读取卡号，本次不涉及更高层次应用
 
-        memcpy(ucArray_ID, RxBuffer, sizeof(RxBuffer)); // 清空字符�???,这里要清除RxBuffer才行
+        memcpy(ucArray_ID, RxBuffer, sizeof(RxBuffer)); // 清空字符�????,这里要清除RxBuffer才行
         sprintf(Card_ID, "%02X%02X%02X%02X", RxBuffer[0], RxBuffer[1], RxBuffer[2], RxBuffer[3]);
         printf("ID=%s\r\n", Card_ID);
         PCD_Select(ucArray_ID); // 选卡
 
         uint8_t ucComMF522Buf_read[16];
-        for (uint8_t b = 0; b<16;b++){
-			if (PCD_AuthState(PICC_AUTHENT1B, b, KeyValue, ucArray_ID) == PCD_OK)
-			{
-			  printf("�???验密码成功\r\n");
-			  if (PCD_ReadBlock(b,ucComMF522Buf_read) == PCD_OK){
-				  printf("读取成功");
-			  }
-			  else{
-				  printf("读取失败");
-			  }
+        for (uint8_t b = 0; b < 16; b++)
+        {
+          if (PCD_AuthState(PICC_AUTHENT1B, b, AuthKeyValue, ucArray_ID) == PCD_OK)
+          {
+            printf("�????验密码成功\r\n");
+            if (PCD_ReadBlock(b, ucComMF522Buf_read) == PCD_OK)
+            {
+              printf("读取成功");
+            }
+            else
+            {
+              printf("读取失败");
+            }
 
-	//          char *pData = "hello";
-	//          uint8_t ucComMF522Buf[16];
-	//          /* 拷贝 pData 里的 Len 个字符到 ucComMF522Buf */
-	//          for (uint8_t j = 0; j < 16; j++)
-	//          {
-	//            if (j < strlen(pData))
-	//              ucComMF522Buf[j] = pData[j];
-	//            else
-	//              ucComMF522Buf[j] = 0; // 16个字节若是未填满的字节置0
-	//          }
-	//          if (PCD_WriteBlock(0x02, ucComMF522Buf) != PCD_OK)
-	//          {
-	//            printf("写入数据到数据块失败\r\n");
-	//          }
-	//          else{
-	//            printf( "写入数据成功！\r\n" );
-	//          }
-			}
-			else
-			{
-			  printf("�???验密码失败\r\n");
-			}
+            //          char *pData = "hello";
+            //          uint8_t ucComMF522Buf[16];
+            //          /* 拷贝 pData 里的 Len 个字符到 ucComMF522Buf */
+            //          for (uint8_t j = 0; j < 16; j++)
+            //          {
+            //            if (j < strlen(pData))
+            //              ucComMF522Buf[j] = pData[j];
+            //            else
+            //              ucComMF522Buf[j] = 0; // 16个字节若是未填满的字节置0
+            //          }
+            //          if (PCD_WriteBlock(0x02, ucComMF522Buf) != PCD_OK)
+            //          {
+            //            printf("写入数据到数据块失败\r\n");
+            //          }
+            //          else{
+            //            printf( "写入数据成功！\r\n" );
+            //          }
+          }
+          else
+          {
+            printf("�????验密码失败\r\n");
+          }
         }
-        HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_RESET); // LED1�???
+        HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_RESET); // LED1�????
       }
     }
     PCD_Halt();
     HAL_Delay(100);
-    HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_SET); // LED1�???
+    HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_SET); // LED1�????
   }
   /* USER CODE END 3 */
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -200,8 +212,8 @@ void SystemClock_Config(void)
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
   /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
+   * in the RCC_OscInitTypeDef structure.
+   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
@@ -215,9 +227,8 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
@@ -240,9 +251,9 @@ void SystemClock_Config(void)
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -254,14 +265,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */

@@ -9,6 +9,7 @@
 #include "main.h"
 #include "stm32f1xx_hal.h"
 #include <stdbool.h>
+#include <string.h>
 
 // 按键行列IO映射
 uint16_t Col_Pin_In[4] = {KEY_C1_Pin, KEY_C2_Pin, KEY_C3_Pin, KEY_C4_Pin};	// 行选择输入
@@ -67,29 +68,35 @@ KeyMap keyboard_scan()
 	return noKey;
 }
 
-char keyboard_process(KeyMode keymode,KeyMap key)
+void keyboard_process(KeyMap key, KeyMode keyMode,char keyValue[])
 {
-	char keyvalue;
-	static char tempvalue;
-	static uint8_t letter_index = 0; //字母模式下字母索引
 	if (key.isFuncKey) { 
 		// 功能键
 	}
 	else{
 		// 普通按键
-		switch (keymode)
+		size_t len = strlen(keyValue);
+		switch (keyMode)
 			{
+			// 数字模式
 			case Numeric:
-				keyvalue = key.name;
+				if(len < MaxKeyValueNumberic-1){
+					// 将key值新增至value
+					keyValue[len] = key.name[0];
+					keyValue[len + 1] = '\0';
+				}
+				else{
+					// 替换最后一位字符
+					keyValue[len-1] = key.name[0];
+					keyValue[len] = '\0';
+				}
 				break;
+
+			// 字母模式
 			case Alphabetic:
-				keyvalue = key.letter[letter_index];
 				break;
 			default:
 				break;
 			}
-		return keyvalue;
 	}
-	
-
 }
