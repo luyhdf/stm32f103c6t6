@@ -10,6 +10,7 @@
 #include "stm32f1xx_hal.h"
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 
 // 按键行列IO映射
 uint16_t Col_Pin_In[4] = {KEY_C1_Pin, KEY_C2_Pin, KEY_C3_Pin, KEY_C4_Pin};	// 行选择输入
@@ -68,7 +69,7 @@ KeyMap keyboard_scan()
 	return noKey;
 }
 
-void numeric_process(char keyName,char keyValue[]){
+void numeric_process(char keyValue[],char keyName){
 	size_t len = strlen(keyValue);
 	if(len < MaxKeyValueNumberic-1){
 		// 将key值新增至value
@@ -82,17 +83,29 @@ void numeric_process(char keyName,char keyValue[]){
 	}
 }
 
-void alphabetic_process(char keyName,char keyValue[]){
+void alphabetic_process(char keyValue[],char letter[]){
 	// todo: 未实现
+	static time_t previousTime = 0; // 静态变量用于保存时间戳
+	static uint8_t alphabetic_index = 0; // 字母索引
+	
+	time_t currentTime = time(NULL); // 获取当前时间戳
+
+    if (previousTime != 0) {
+        double elapsedTime = difftime(currentTime, previousTime); // 计算时间间隔，单位为秒
+        printf("Time elapsed: %ld seconds\n", elapsedTime);
+    }
+
+    previousTime = currentTime; // 更新上一次时间戳
+
 	size_t len = strlen(keyValue);
 	if(len < MaxKeyValueAlphabetic-1){
 		// 将key值新增至value
-		keyValue[len] = keyName;
+		keyValue[len] = letter[alphabetic_index];
 		keyValue[len + 1] = '\0';
 	}
 	else{
 		// 替换最后一位字符
-		keyValue[len-1] = keyName;
+		keyValue[len-1] = letter[alphabetic_index];
 		keyValue[len] = '\0';
 	}
 }
@@ -125,11 +138,11 @@ void keyboard_process(KeyMap key, KeyMethod *keyMethod)
 			{
 			// 数字模式
 			case Numeric:
-				numeric_process(key.name[0],keyMethod->keyValue);
+				numeric_process(keyMethod->keyValue,key.name[0]);
 				break;
 			// 字母模式
 			case Alphabetic:
-				alphabetic_process(key.name[0],keyMethod->keyValue);
+				alphabetic_process(keyMethod->keyValue,key.letter);
 				break;
 			default:
 				break;

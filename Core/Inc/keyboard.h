@@ -16,9 +16,9 @@
 // 按键映射定义
 typedef struct {
 	const uint8_t id;
-    const char name[20];
+    const char name[10];
     bool isFuncKey; // 是否为功能键
-    const char* letter;
+    const char letter[5];
 } KeyMap;
 
 // 输入法模式

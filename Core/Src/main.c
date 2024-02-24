@@ -117,7 +117,7 @@ int main(void)
 
   // 初始化数字模式及空字符
 
-  KeyMethod keyMethod = { Numeric,
+  KeyMethod keyMethod = { Alphabetic,
                           FKEY_NULL,
                           "" };
 
