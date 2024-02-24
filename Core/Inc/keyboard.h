@@ -9,6 +9,7 @@
 #define INC_KEYBOARD_H_
 
 #include "main.h"
+#include <stdbool.h>
 
 #define MatrixKeyPort GPIOB
 
@@ -16,6 +17,7 @@
 typedef struct {
 	const uint8_t id;
     const char* name;
+    bool isFuncKey; // 是否为功能键
     const char* letter;
 } KeyMap;
 
