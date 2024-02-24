@@ -31,7 +31,23 @@ typedef enum {
 #define MaxKeyValueNumberic 5 //数字最大长度为4位
 #define MaxKeyValueAlphabetic 20 // 字母最大长度为19
 
+// 定义功能键编码
+#define FKEY_NULL 0 // 无功能
+#define FKEY_DELETE 8
+#define FKEY_ENTER 16
+#define FKEY_UP 4
+#define FKEY_DOWN 12
+#define FKEY_LEFT 13
+#define FKEY_RIGHT 15
+
+typedef struct {
+	KeyMode keyMode;
+    uint8_t triggerKeyFunc; // 触发功能键
+    char keyValue[MaxKeyValueAlphabetic];
+} KeyMethod;
+
 KeyMap keyboard_scan();
-void keyboard_process(KeyMap key, KeyMode keyMode,char keyValue[]);
+
+void keyboard_process(KeyMap key, KeyMethod *keyMethod);
 
 #endif /* INC_KEYBOARD_H_ */

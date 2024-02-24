@@ -68,32 +68,68 @@ KeyMap keyboard_scan()
 	return noKey;
 }
 
-void keyboard_process(KeyMap key, KeyMode keyMode,char keyValue[])
+void numeric_process(char keyName,char keyValue[]){
+	size_t len = strlen(keyValue);
+	if(len < MaxKeyValueNumberic-1){
+		// 将key值新增至value
+		keyValue[len] = keyName;
+		keyValue[len + 1] = '\0';
+	}
+	else{
+		// 替换最后一位字符
+		keyValue[len-1] = keyName;
+		keyValue[len] = '\0';
+	}
+}
+
+void alphabetic_process(char keyName,char keyValue[]){
+	// todo: 未实现
+	size_t len = strlen(keyValue);
+	if(len < MaxKeyValueAlphabetic-1){
+		// 将key值新增至value
+		keyValue[len] = keyName;
+		keyValue[len + 1] = '\0';
+	}
+	else{
+		// 替换最后一位字符
+		keyValue[len-1] = keyName;
+		keyValue[len] = '\0';
+	}
+}
+
+void delete_process(KeyMethod *keyMethod){
+    size_t len = strlen(keyMethod->keyValue);
+	if(len > 0){
+		keyMethod->keyValue[len-1] = '\0';
+	}
+}
+
+void keyboard_process(KeyMap key, KeyMethod *keyMethod)
 {
 	if (key.isFuncKey) { 
 		// 功能键
+		switch (key.id)
+		{
+		case FKEY_DELETE:
+			delete_process(keyMethod);
+			break;
+		default:
+			keyMethod->triggerKeyFunc = key.id;
+			break;
+		}
+		
 	}
 	else{
 		// 普通按键
-		size_t len = strlen(keyValue);
-		switch (keyMode)
+		switch (keyMethod->keyMode)
 			{
 			// 数字模式
 			case Numeric:
-				if(len < MaxKeyValueNumberic-1){
-					// 将key值新增至value
-					keyValue[len] = key.name[0];
-					keyValue[len + 1] = '\0';
-				}
-				else{
-					// 替换最后一位字符
-					keyValue[len-1] = key.name[0];
-					keyValue[len] = '\0';
-				}
+				numeric_process(key.name[0],keyMethod->keyValue);
 				break;
-
 			// 字母模式
 			case Alphabetic:
+				alphabetic_process(key.name[0],keyMethod->keyValue);
 				break;
 			default:
 				break;

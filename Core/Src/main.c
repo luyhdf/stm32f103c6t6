@@ -113,11 +113,13 @@ int main(void)
   uint8_t RxBuffer[4];
   char Card_ID[9];
   uint8_t AuthKeyValue[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; // 密钥
-  uint8_t ucStatusReturn;                                    /*返回状�??*/
+  uint8_t ucStatusReturn;                                        /*返回状�??*/
 
   // 初始化数字模式及空字符
-  char keyValue[MaxKeyValueAlphabetic] = "";
-  KeyMode keyMode = Numeric;
+
+  KeyMethod keyMethod = { Numeric,
+                          FKEY_NULL,
+                          "" };
 
   while (1)
   {
@@ -131,8 +133,8 @@ int main(void)
     if (key.id != 0)
     {
       printf("Pressed key: %s\n", key.name);
-      keyboard_process(key,keyMode,keyValue);
-      printf("keyboard_process keyValue: %s\n", keyValue);
+      keyboard_process(key, &keyMethod);
+      printf("keyboard_process keyValue: %s\n", keyMethod.keyValue);
     }
     else
     {
