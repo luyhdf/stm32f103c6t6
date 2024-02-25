@@ -29,9 +29,6 @@ typedef enum {
     Alphabetic // 字母模式
 } KeyMode;
 
-
-#define MaxKeyValue 4 // 缓存键盘输入最大输入长度
-
 // 定义功能键编码
 typedef enum {
 	FKEY_NULL = 0,  // 非功能键
@@ -44,6 +41,7 @@ typedef enum {
 } FKeyMode;
 
 #define NextAlphabeticTimeout 500 // 字母切换下一位超时时间ms
+#define MaxKeyValue 4 // 缓存键盘输入最大输入长度
 
 typedef struct {
 	KeyMode keyMode;

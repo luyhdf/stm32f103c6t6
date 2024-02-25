@@ -17,22 +17,22 @@ uint16_t Row_Pin_Out[4] = {KEY_R1_Pin, KEY_R2_Pin, KEY_R3_Pin, KEY_R4_Pin}; // �
 
 // 按键功能映射
 const KeyMap keymap[4][4] = {
-	{{1, "1", false, ""},
+	{{1, "1", false, "\0"},
 	 {2, "2", false, "abc"},
 	 {3, "3", false, "def"},
-	 {4, "up", true, ""}},
+	 {4, "up", true, "\0"}},
 	{{5, "4", false, "ghi"},
 	 {6, "5", false, "jkl"},
 	 {7, "6", false, "mno"},
-	 {8, "delete", true, ""}},
+	 {8, "delete", true, "\0"}},
 	{{9, "7", false, "pqrs"},
 	 {10, "8", false, "tuv"},
 	 {11, "9", false, "wxyz"},
-	 {12, "down", true, ""}},
-	{{13, "left", true, ""},
+	 {12, "down", true, "\0"}},
+	{{13, "left", true, "\0"},
 	 {14, "0", false, ""},
-	 {15, "right", true, ""},
-	 {16, "enter", true, ""}}};
+	 {15, "right", true, "\0"},
+	 {16, "enter", true, "\0"}}};
 
 // 无按键
 const KeyMap keyNULL = {0, "keyNULL",false, ""};
