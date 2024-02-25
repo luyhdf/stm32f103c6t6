@@ -1,3 +1,6 @@
+#include "main.h"
+
+#ifdef WORDLIST_BIP39
 
 const char* wordlist_bip39[2048] = {
 	"abandon",
@@ -2048,4 +2051,8 @@ const char* wordlist_bip39[2048] = {
 	"zero",
 	"zone",
 	"zoo"};
+
+#else
+const char* wordlist_bip39[];
+#endif
 

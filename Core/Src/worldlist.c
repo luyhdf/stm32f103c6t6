@@ -14,5 +14,5 @@ int wordlist_fit(KeyMethod keyMethod)
             return i;
         }
     }
-    return -1;
+    return NullWordIndex;
 }

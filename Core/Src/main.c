@@ -119,6 +119,8 @@ int main(void)
   // 初始化数字模式及空字符
 
   KeyMethod keyMethod = {Alphabetic,&keyNULL,FKEY_NULL,{}};
+//  WordListMethod wordListMethod = {SLIP39,S12,0,{},0,{},0};
+//  WordListMethod wordListMethod = {};
   int wordListIndex = 0;
 
   while (1)
