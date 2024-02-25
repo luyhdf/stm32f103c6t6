@@ -8,7 +8,7 @@
 #ifndef WORDLIST_SLIP39_H_
 #define WORDLIST_SLIP39_H_
 
-const char *wordlist_slip39[1024] = {
+const char* wordlist_slip39[1024] = {
 	"academic"
 	"acid"
 	"acne"

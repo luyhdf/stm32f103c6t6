@@ -8,7 +8,7 @@
 #ifndef WORDLIST_BIP39_H_
 #define WORDLIST_BIP39_H_
 
-const char *wordlist_bip39[2048] = {
+const char* wordlist_bip39[2048] = {
 	"abandon",
 	"ability",
 	"able",

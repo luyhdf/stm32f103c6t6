@@ -81,6 +81,8 @@ void Error_Handler(void);
 #define KEY_C4_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
+#define WORDLIST_SLIP39
+// #define WORDLIST_BIP39
 
 /* USER CODE END Private defines */
 
