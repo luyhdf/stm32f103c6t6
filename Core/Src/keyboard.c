@@ -44,14 +44,14 @@ KeyMap* keyboard_scan()
 	{
 		// 将当前行拉低
 		HAL_GPIO_WritePin(MatrixKeyPort, Row_Pin_Out[row], GPIO_PIN_RESET);
-
+		HAL_Delay(5);
 		// 检测列
 		for (int col = 0; col < 4; col++)
 		{
 			if (HAL_GPIO_ReadPin(MatrixKeyPort, Col_Pin_In[col]) == GPIO_PIN_RESET)
 			{
 				// 延时一段时间进行按键消抖
-				HAL_Delay(10);
+				HAL_Delay(5);
 
 				// 再次检测按键状态
 				if (HAL_GPIO_ReadPin(MatrixKeyPort, Col_Pin_In[col]) == GPIO_PIN_RESET)

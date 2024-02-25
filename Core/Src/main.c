@@ -194,7 +194,7 @@ int main(void)
       }
     }
     PCD_Halt();
-    HAL_Delay(100);
+    HAL_Delay(20);
     HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_SET); // LED1�????
   }
   /* USER CODE END 3 */
