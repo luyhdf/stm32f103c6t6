@@ -29,9 +29,8 @@ typedef enum {
     Alphabetic // 字母模式
 } KeyMode;
 
-// 缓存键盘输入最大输入长度
-#define MaxKeyValueNumberic 5 //数字最大长度为4位
-#define MaxKeyValueAlphabetic 20 // 字母最大长度为19
+
+#define MaxKeyValue 4 // 缓存键盘输入最大输入长度
 
 // 定义功能键编码
 typedef enum {
@@ -50,7 +49,7 @@ typedef struct {
 	KeyMode keyMode;
     const KeyMap* lastKey; // 最新按键
     FKeyMode fKeyMode; // 触发功能键
-    char keyValue[MaxKeyValueAlphabetic];
+    char keyValue[MaxKeyValue];
 } KeyMethod;
 
 KeyMap* keyboard_scan();

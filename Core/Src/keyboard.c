@@ -70,15 +70,15 @@ KeyMap* keyboard_scan()
 
 void numeric_process(KeyMethod *keyMethod){
 	size_t len = strlen(keyMethod->keyValue);
-	char keyName = keyMethod->lastKey->name;
-	if(len < MaxKeyValueNumberic-1){
+	char* keyName = keyMethod->lastKey->name;
+	if(len < MaxKeyValue){
 		// 将key值新增至value
-		keyMethod->keyValue[len] = keyName;
+		keyMethod->keyValue[len] = *keyName;
 		keyMethod->keyValue[len + 1] = '\0';
 	}
 	else{
 		// 替换最后一位字符
-		keyMethod->keyValue[len-1] = keyName;
+		keyMethod->keyValue[len-1] = *keyName;
 		keyMethod->keyValue[len] = '\0';
 	}
 }
@@ -111,7 +111,7 @@ void alphabetic_process(KeyMethod *keyMethod){
  	previousTime = currentTime; // 更新上一次时间戳
 	lastKeyTemp = lastKey;  // 更新上一次按键
 
-	if(len < MaxKeyValueAlphabetic-1 && alphabetic_index == 0){
+	if(len < MaxKeyValue && alphabetic_index == 0){
 		// 将key值新增至value
 		keyMethod->keyValue[len] = *letter;
 		keyMethod->keyValue[len + 1] = '\0';
