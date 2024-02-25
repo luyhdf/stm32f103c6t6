@@ -31,6 +31,7 @@
 #include <string.h>
 #include "RC522.h"
 #include "keyboard.h"
+#include "wordlist.h"
 // #include "wordlist_bip39.h"
 // #include "wordlist_slip39.h"
 
@@ -117,7 +118,8 @@ int main(void)
 
   // 初始化数字模式及空字符
 
-  KeyMethod keyMethod = {Numeric,&keyNULL,FKEY_NULL,""};
+  KeyMethod keyMethod = {Alphabetic,&keyNULL,FKEY_NULL,{}};
+  int wordListIndex = 0;
 
   while (1)
   {
@@ -132,6 +134,8 @@ int main(void)
       printf("Pressed key: %s\n", keyMethod.lastKey->name);
       keyboard_process(&keyMethod);
       printf("keyboard_process keyValue: %s\n", keyMethod.keyValue);
+      wordListIndex = wordlist_fit(keyMethod);
+      printf("word : %s\n", wordlist_slip39[wordListIndex]);
     }
     else
     {

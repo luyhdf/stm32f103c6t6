@@ -21,6 +21,6 @@ extern const char *wordlist_bip39[2048];
 
 #define MaxWordBufferSize 5
 
-void wordlist_fit(KeyMethod keyMethod,uint16_t wordListBuffer[]);
+int wordlist_fit(KeyMethod keyMethod);
 
 #endif /* INC_WORDLIST_H_ */
