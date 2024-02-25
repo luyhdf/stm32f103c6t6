@@ -1,13 +1,3 @@
-/*
- * wordlist_slip39.h
- *
- *  Created on: Feb 22, 2024
- *      Author: luyh
- */
-
-#ifndef WORDLIST_SLIP39_H_
-#define WORDLIST_SLIP39_H_
-
 const char* wordlist_slip39[1024] = {
 	"academic"
 	"acid"
@@ -1034,4 +1024,3 @@ const char* wordlist_slip39[1024] = {
 	"yoga"
 	"zero"};
 
-#endif /* INC_WORDLIST_H_ */

@@ -12,12 +12,15 @@
 #include "keyboard.h"
 
 #ifdef WORDLIST_SLIP39
-#include "wordlist_slip39.h"
+extern const char *wordlist_slip39[1024];
 #endif
 
 #ifdef WORDLIST_BIP39
-#include "wordlist_bip39.h"
+extern const char *wordlist_bip39[2048];
 #endif
 
+#define MaxWordBufferSize 5
+
+void wordlist_fit(KeyMethod keyMethod,uint16_t wordListBuffer[]);
 
 #endif /* INC_WORDLIST_H_ */

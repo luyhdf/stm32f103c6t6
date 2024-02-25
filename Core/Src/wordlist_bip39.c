@@ -1,12 +1,3 @@
-/*
- * wordlist_bip39.h
- *
- *  Created on: Feb 22, 2024
- *      Author: luyh
- */
-
-#ifndef WORDLIST_BIP39_H_
-#define WORDLIST_BIP39_H_
 
 const char* wordlist_bip39[2048] = {
 	"abandon",
@@ -2058,4 +2049,3 @@ const char* wordlist_bip39[2048] = {
 	"zone",
 	"zoo"};
 
-#endif /* INC_WORDLIST_H_ */
