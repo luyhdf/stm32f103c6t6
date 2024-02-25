@@ -16,10 +16,12 @@
 // 按键映射定义
 typedef struct {
 	const uint8_t id;
-    const char name[10];
+    const char* name;
     bool isFuncKey; // 是否为功能键
-    const char letter[5];
+    const char* letter;
 } KeyMap;
+
+extern const KeyMap keyNULL; // 无按键编码
 
 // 输入法模式
 typedef enum {
@@ -32,22 +34,27 @@ typedef enum {
 #define MaxKeyValueAlphabetic 20 // 字母最大长度为19
 
 // 定义功能键编码
-#define FKEY_NULL 0 // 无功能
-#define FKEY_DELETE 8
-#define FKEY_ENTER 16
-#define FKEY_UP 4
-#define FKEY_DOWN 12
-#define FKEY_LEFT 13
-#define FKEY_RIGHT 15
+typedef enum {
+	FKEY_NULL = 0,  // 非功能键
+	FKEY_DELETE = 8,
+	FKEY_ENTER = 16,
+	FKEY_UP = 4,
+	FKEY_DOWN = 12,
+	FKEY_LEFT = 13,
+	FKEY_RIGHT = 15
+} FKeyMode;
+
+#define NextAlphabeticTimeout 500 // 字母切换下一位超时时间ms
 
 typedef struct {
 	KeyMode keyMode;
-    uint8_t triggerKeyFunc; // 触发功能键
+    const KeyMap* lastKey; // 最新按键
+    FKeyMode fKeyMode; // 触发功能键
     char keyValue[MaxKeyValueAlphabetic];
 } KeyMethod;
 
-KeyMap keyboard_scan();
+KeyMap* keyboard_scan();
 
-void keyboard_process(KeyMap key, KeyMethod *keyMethod);
+void keyboard_process(KeyMethod *keyMethod);
 
 #endif /* INC_KEYBOARD_H_ */

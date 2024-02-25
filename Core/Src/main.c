@@ -117,9 +117,7 @@ int main(void)
 
   // 初始化数字模式及空字符
 
-  KeyMethod keyMethod = { Alphabetic,
-                          FKEY_NULL,
-                          "" };
+  KeyMethod keyMethod = {Alphabetic,&keyNULL,FKEY_NULL,""};
 
   while (1)
   {
@@ -127,13 +125,12 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    KeyMap key = keyboard_scan();
-
-    // 使用返回的指针进行操�??
-    if (key.id != 0)
+    keyMethod.lastKey = keyboard_scan();
+    if (keyMethod.lastKey != &keyNULL)
     {
-      printf("Pressed key: %s\n", key.name);
-      keyboard_process(key, &keyMethod);
+      // 新按键
+      printf("Pressed key: %s\n", keyMethod.lastKey->name);
+      keyboard_process(&keyMethod);
       printf("keyboard_process keyValue: %s\n", keyMethod.keyValue);
     }
     else
